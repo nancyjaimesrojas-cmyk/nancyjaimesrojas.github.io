@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego del Ahorcado</title>
+<style>
+  body {
+    font-family: "Arial", sans-serif;
+    background: #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+
+  h1 {
+    color: #333;
+  }
+
+  #palabra {
+    font-size: 2em;
+    letter-spacing: 10px;
+    margin: 20px 0;
+  }
+
+  #letras {
+    margin-top: 20px;
+  }
+
+  button {
+    margin: 3px;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #4caf50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  #ahorcado {
+    margin-top: 20px;
+    font-family: monospace;
+    white-space: pre;
+  }
+
+  #mensaje {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 20px;
+  }
+
+  #reiniciar {
+    background-color: #007bff;
+    margin-top: 15px;
+  }
+</style>
+</head>
+<body>
+  <h1>Juego del Ahorcado</h1>
+  <div id="ahorcado"></div>
+  <div id="palabra"></div>
+  <div id="letras"></div>
+  <div id="mensaje"></div>
+  <button id="reiniciar" onclick="iniciarJuego()">Reiniciar Juego</button>
+
+  <script>
+    const palabras = ["PROGRAMAR", "AHORCADO", "COLOMBIA", "JAVASCRIPT", "ORDENADOR", "INTERNET", "CHATGPT"];
+    let palabraSecreta = "";
+    let palabraMostrada = [];
+    let errores = 0;
+    const maxErrores = 6;
+
+    const dibujoAhorcado = [
+`
+
+
+
+
+_________`,
+`
+    |
+    |
+    |
+    |
+    |
+____|____`,
+`
+    _______
+    |/
+    |
+    |
+    |
+    |
+____|____`,
+`
+    _______
+    |/    |
+    |     O
+    |
+    |
+    |
+____|____`,
+`
+    _______
+    |/    |
+    |     O
+    |     |
+    |
+    |
+____|____`,
+`
+    _______
+    |/    |
+    |     O
+    |    /|
+    |
+    |
+____|____`,
+`
+    _______
+    |/    |
+    |     O
+    |    /|\\
+    |    / \\
+    |
+____|____`
+    ];
+
+    function iniciarJuego() {
+      errores = 0;
+      palabraSecreta = palabras[Math.floor(Math.random() * palabras.length)];
+      palabraMostrada = Array(palabraSecreta.length).fill("_");
+      document.getElementById("mensaje").textContent = "";
+      mostrarPalabra();
+      mostrarLetras();
+      actualizarDibujo();
+    }
+
+    function mostrarPalabra() {
+      document.getElementById("palabra").textContent = palabraMostrada.join(" ");
+    }
+
+    function mostrarLetras() {
+      const letrasDiv = document.getElementById("letras");
+      letrasDiv.innerHTML = "";
+      for (let i = 65; i <= 90; i++) {
+        const letra = String.fromCharCode(i);
+        const boton = document.createElement("button");
+        boton.textContent = letra;
+        boton.onclick = () => adivinarLetra(letra, boton);
+        letrasDiv.appendChild(boton);
+      }
+    }
+
+    function adivinarLetra(letra, boton) {
+      boton.disabled = true;
+      if (palabraSecreta.includes(letra)) {
+        for (let i = 0; i < palabraSecreta.length; i++) {
+          if (palabraSecreta[i] === letra) palabraMostrada[i] = letra;
+        }
+        mostrarPalabra();
+        if (!palabraMostrada.includes("_")) {
+          document.getElementById("mensaje").textContent = "🎉 ¡Ganaste! La palabra era " + palabraSecreta;
+          desactivarBotones();
+        }
+      } else {
+        errores++;
+        actualizarDibujo();
+        if (errores === maxErrores) {
+          document.getElementById("mensaje").textContent = "💀 Perdiste. La palabra era: " + palabraSecreta;
+          desactivarBotones();
+        }
+      }
+    }
+
+    function actualizarDibujo() {
+      document.getElementById("ahorcado").textContent = dibujoAhorcado[errores];
+    }
+
+    function desactivarBotones() {
+      document.querySelectorAll("#letras button").forEach(b => b.disabled = tru
+    }
