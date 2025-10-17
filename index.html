@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Distribuidora La Gran Cosecha</title>
+  <meta name="description" content="Distribuidora de alimentos — arroz, harina y azúcar. Compra al por mayor." />
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --accent:#2b8aee;
+      --muted:#6b7280;
+      --success:#16a34a;
+      --danger:#ef4444;
+      --glass: rgba(255,255,255,0.6);
+      --radius:12px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),#eef2ff);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.4;
+      padding:24px;
+    }
+
+    /* Layout */
+    .container{
+      max-width:1100px;
+      margin:0 auto;
+    }
+    header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:20px;
+    }
+    .brand{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo{
+      width:56px;
+      height:56px;
+      border-radius:10px;
+      background:linear-gradient(135deg,var(--accent),#7dd3fc);
+      display:grid;
+      place-items:center;
+      color:white;
+      font-weight:700;
+      font-size:20px;
+      box-shadow:0 6px 18px rgba(43,138,238,0.14);
+    }
+    h1{font-size:20px;margin:0}
+    .tagline{color:var(--muted);font-size:13px}
+
+    /* Controls */
+    .controls{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+    .search{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      background:var(--card);
+      border-radius:999px;
+      padding:6px 10px;
+      box-shadow:0 6px 14px rgba(2,6,23,0.06);
+    }
+    .search input{
+      border:0;
+      outline:0;
+      width:220px;
+      padding:6px;
+      font-size:14px;
+      background:transparent;
+    }
+    .select{
+      background:var(--card);
+      border-radius:10px;
+      padding:6px;
+      box-shadow:0 6px 14px rgba(2,6,23,0.06);
+      display:flex;
+      align-items:center;
+    }
+    button.icon{
+      background:var(--accent);
+      color:white;
+      border:0;
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    button.icon.secondary{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid rgba(43,138,238,0.12);
+    }
+
+    /* Hero */
+    .hero{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      background:linear-gradient(90deg, rgba(43,138,238,0.08), rgba(125,211,252,0.04));
+      padding:18px;
+      border-radius:14px;
+      margin-bottom:22px;
+    }
+    .hero-left{flex:1}
+    .hero h2{margin:0 0 6px 0;font-size:18px}
+    .hero p{margin:0;color:var(--muted)}
+    .hero-right{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    /* Products */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+      margin-bottom:22px;
+    }
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:16px;
+      box-shadow:0 8px 24px rgba(15,23,42,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .card:hover{transform:translateY(-6px); box-shadow:0 20px 40px rgba(15,23,42,0.09)}
+    .thumb{
+      height:120px;
+      border-radius:10px;
+      background:linear-gradient(135deg,#fff,#f8fafc);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      color:var(--muted);
+      font-size:22px;
+    }
+    .meta{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .price{font-weight:700}
+    .muted{color:var(--muted); font-size:13px}
+    .controls-row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+
+    .qty{
+      display:flex;
+      gap:6px;
+      align-items:center;
+      background:var(--glass);
+      padding:6px;
+      border-radius:10px;
+    }
+    .qty button{border:0;background:transparent;font-weight:700;padding:6px;cursor:pointer}
+    .qty input{width:44px;border:0;text-align:center;background:transparent;font-weight:600}
+
+    .btn{
+      background:var(--accent);
+      color:white;
+      border:0;
+      padding:10px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:700;
+      width:100%;
+    }
+    .btn.ghost{
+      background:transparent;
+      color:var(--accent);
+      border:1px solid rgba(43,138,238,0.14);
+    }
+
+    /* Cart */
+    .cart-btn{
+      position:relative;
+    }
+    .cart-count{
+      position:absolute;
+      top:-6px;
+      right:-6px;
+      background:var(--danger);
+      color:white;
+      width:20px;
+      height:20px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .drawer{
+      position:fixed;
+      right:18px;
+      top:18px;
+      width:360px;
+      max-width:calc(100% - 36px);
+      background:var(--card);
+      border-radius:14px;
+      box-shadow:0 40px 80px rgba(2,6,23,0.18);
+      padding:16px;
+      transform:translateY(-10px);
+      transition:opacity .18s ease, transform .18s ease;
+      opacity:0;
+      pointer-events:none;
+      z-index:40;
+    }
+    .drawer.open{opacity:1;pointer-events:auto;transform:translateY(0)}
+    .drawer h3{margin:0 0 8px 0}
+    .cart-items{display:flex;flex-direction:column;gap:10px;max-height:320px;overflow:auto;padding-right:6px}
+    .cart-item{display:flex;gap:12px;align-items:center}
+    .cart-item .small-thumb{
+      width:54px;height:54px;border-radius:8px;background:linear-gradient(135deg,#fff,#f8fafc);display:grid;place-items:center;font-weight:700;color:var(--muted)
+    }
+    .cart-item .ci-info{flex:1}
+    .cart-item .ci-qty{font-weight:700}
+    .cart-bottom{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+
+    /* Footer */
+    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* Responsive tweaks */
+    @media (max-width:640px){
+      .hero{flex-direction:column;align-items:flex-start}
+      .controls{flex-direction:column;align-items:stretch}
+      .search input{width:120px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">GC</div>
+        <div>
+          <h1>Distribuidora La Gran Cosecha</h1>
+          <div class="tagline">Suministros alimentarios al por mayor</div>
+        </div>
+      </div>
+
+      <div class="controls" aria-hidden="false">
+        <div class="search" role="search" aria-label="Buscar productos">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 21l-4.35-4.35" stroke="#8b98a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#8b98a8" stroke-width="2"/></svg>
+          <input id="searchInput" placeholder="Buscar arroz, harina, azúcar..." />
+        </div>
+
+        <div class="select" title="Ordenar">
+          <label for="sortSelect" class="muted" style="margin-right:6px">Ordenar</label>
+          <select id="sortSelect" aria-label="Ordenar productos">
+            <option value="default">Recomendados</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+          </select>
+        </div>
+
+        <div class="cart-btn">
+          <button id="openCart" class="icon secondary" aria-haspopup="dialog" aria-controls="cartDrawer">Carrito</button>
+          <div id="cartCount" class="cart-count" aria-hidden="true" style="display:none">0</div>
+        </div>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-left">
+        <h2 id="heroTitle">Calidad, volumen y entrega confiable</h2>
+        <p>Vendemos arroz, harina y azúcar en sacos o cajas — ideal para comercios y panaderías. Consulta disponibilidad y pide al por mayor.</p>
+      </div>
+      <div class="hero-right">
+        <div>
+          <div class="muted">Pedir mínimo</div>
+          <strong>10 unidades</strong>
+        </div>
+        <div style="text-align:right">
+          <div class="muted">Entrega</div>
+          <strong>24-72 hrs</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Productos -->
+    <main>
+      <div id="productsGrid" class="grid" aria-live="polite"></div>
+    </main>
+
+    <!-- Cart drawer -->
+    <aside id="cartDrawer" class="drawer" role="dialog" aria-modal="false" aria-hidden="true">
+      <h3>Carrito</h3>
+      <div id="cartItems" class="cart-items"></div>
+      <div class="cart-bottom">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div class="muted">Total</div>
+          <div id="cartTotal" style="font-weight:800">S/ 0.00</div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="checkoutBtn" class="btn">Finalizar pedido</button>
+          <button id="clearBtn" class="btn ghost">Vaciar</button>
+        </div>
+      </div>
+    </aside>
+
+    <footer>
+      © <span id="year"></span> Distribuidora La Gran Cosecha · Contacto: ventas@lagrancosecha.example · Tel: +57 300 000 0000
+    </footer>
+  </div>
+
+  <script>
+    /* ====== Datos de productos ======
+       Los identificadores, precios y stocks se pueden cambiar aquí.
+    */
+    const PRODUCTS = [
+      {
+        id: 'arroz-001',
+        name: 'Arroz Fortificado 50 kg',
+        price: 85.50,
+        unit: 'saco 50kg',
+        stock: 120,
+        desc: 'Arroz de alta calidad, ideal para distribución y consumo masivo.',
+        short: 'Arroz 50kg',
+      },
+      {
+        id: 'harina-001',
+        name: 'Harina de Trigo 25 kg',
+        price: 42.00,
+        unit: 'saco 25kg',
+        stock: 80,
+        desc: 'Harina blanca para panadería y repostería, consistente y fina.',
+        short: 'Harina 25kg',
+      },
+      {
+        id: 'azucar-001',
+        name: 'Azúcar Refinada 50 kg',
+        price: 78.75,
+        unit: 'saco 50kg',
+        stock: 65,
+        desc: 'Azúcar refinada, granulometría estable, buena para procesos industriales y de alimentos.',
+        short: 'Azúcar 50kg',
+      }
+    ];
+
+    /* ====== Estado ====== */
+    let products = [...PRODUCTS];
+    let cart = JSON.parse(localStorage.getItem('cart_v1')) || {};
+
+    /* ====== Helpers ====== */
+    const $ = sel => document.querySelector(sel);
+    const money = n => {
+      // Formateo monetario en soles (S/) — ajusta si necesitas otra moneda
+      return 'S/ ' + Number(n).toLocaleString('es-PE', {minimumFractionDigits:2, maximumFractionDigits:2});
+    };
+
+    /* ====== Render productos ====== */
+    function renderProducts(list){
+      const grid = $('#productsGrid');
+      grid.innerHTML = '';
+      if(list.length === 0){
+        grid.innerHTML = '<div class="muted" style="padding:12px;background:var(--card);border-radius:10px">No se encontraron productos.</div>';
+        return;
+      }
+
+      list.forEach(p => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb" aria-hidden="true">${p.short}</div>
+          <div>
+            <div class="meta">
+              <div>
+                <div style="font-weight:800">${p.name}</div>
+                <div class="muted" style="font-size:13px">${p.unit} • <span id="stock-${p.id}">Stock: ${p.stock}</span></div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">${money(p.price)}</div>
+                <div class="muted" style="font-size:13px">Precio unitario</div>
+              </div>
+            </div>
+            <p class="muted" style="margin-top:10px">${p.desc}</p>
+          </div>
+          <div class="controls-row">
+            <div style="flex:1">
+              <div class="qty" aria-hidden="false">
+                <button class="dec" data-id="${p.id}" aria-label="Disminuir">−</button>
+                <input type="number" min="1" value="1" id="qty-${p.id}" aria-label="Cantidad ${p.name}" />
+                <button class="inc" data-id="${p.id}" aria-label="Aumentar">+</button>
+              </div>
+            </div>
+            <div style="width:160px">
+              <button class="btn add" data-id="${p.id}">Agregar al carrito</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // event delegation for qty buttons and add
+      grid.querySelectorAll('.inc').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        const input = document.getElementById('qty-' + id);
+        input.value = Math.max(1, Number(input.value || 1) + 1);
+      }));
+      grid.querySelectorAll('.dec').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        const input = document.getElementById('qty-' + id);
+        input.value = Math.max(1, Number(input.value || 1) - 1);
+      }));
+      grid.querySelectorAll('.add').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        const qty = Math.max(1, Number(document.getElementById('qty-'+id).value || 1));
+        addToCart(id, qty);
+      }));
+    }
+
+    /* ====== Carrito ====== */
+    function addToCart(productId, qty){
+      const prod = products.find(p => p.id === productId);
+      if(!prod) return alert('Producto no encontrado');
+      if(qty > prod.stock) return alert('La cantidad solicitada excede el stock disponible.');
+
+      if(cart[productId]){
+        cart[productId].qty += qty;
+      } else {
+        cart[productId] = { id: prod.id, name: prod.name, price: prod.price, qty: qty };
+      }
+      // prevent exceeding stock in cart
+      if(cart[productId].qty > prod.stock) cart[productId].qty = prod.stock;
+
+      persistCart();
+      flashCart();
+      renderCart();
+    }
+
+    function removeFromCart(id){
+      delete cart[id];
+      persistCart();
+      renderCart();
+    }
+
+    function updateQty(id, qty){
+      const prod = products.find(p => p.id === id);
+      if(qty < 1) qty = 1;
+      if(qty > prod.stock) qty = prod.stock;
+      if(cart[id]) cart[id].qty = qty;
+      persistCart();
+      renderCart();
+    }
+
+    function clearCart(){
+      cart = {};
+      persistCart();
+      renderCart();
+    }
+
+    function persistCart(){
+      localStorage.setItem('cart_v1', JSON.stringify(cart));
+    }
+
+    function cartCount(){
+      return Object.values(cart).reduce((s,i)=>s+i.qty,0);
+    }
+
+    function cartTotal(){
+      return Object.values(cart).reduce((s,i)=>s + i.qty * i.price, 0);
+    }
+
+    /* ====== Render carrito drawer ====== */
+    function renderCart(){
+      const drawer = $('#cartDrawer');
+      const itemsEl = $('#cartItems');
+      itemsEl.innerHTML = '';
+
+      const entries = Object.values(cart);
+      if(entries.length === 0){
+        itemsEl.innerHTML = '<div class="muted">Tu carrito está vacío.</div>';
+      } else {
+        entries.forEach(item => {
+          const prod = products.find(p=>p.id === item.id) || {};
+          const row = document.createElement('div');
+          row.className = 'cart-item';
+          row.innerHTML = `
+            <div class="small-thumb" aria-hidden="true">${(prod.short||'Prod').split(' ')[0]}</div>
+            <div class="ci-info">
+              <div style="font-weight:700">${item.name}</div>
+              <div class="muted" style="font-size:13px">${money(item.price)} • Stock: ${prod.stock ?? '—'}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="ci-qty">x${item.qty}</div>
+              <div style="font-weight:700">${money(item.price * item.qty)}</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-left:8px">
+              <button class="btn ghost small-remove" data-id="${item.id}" style="padding:6px 8px;font-size:13px">Quitar</button>
+              <div style="display:flex;gap:6px;align-items:center">
+                <button class="qty-dec" data-id="${item.id}" aria-label="Disminuir">−</button>
+                <input class="cart-qty-input" data-id="${item.id}" style="width:44px;text-align:center" value="${item.qty}" aria-label="Cantidad en carrito" />
+                <button class="qty-inc" data-id="${item.id}" aria-label="Aumentar">+</button>
+              </div>
+            </div>
+          `;
+          itemsEl.appendChild(row);
+        });
+      }
+
+      $('#cartTotal').textContent = money(cartTotal());
+
+      // update cart count badge
+      const c = cartCount();
+      const badge = $('#cartCount');
+      if(c > 0){
+        badge.style.display = 'grid';
+        badge.textContent = c;
+      } else {
+        badge.style.display = 'none';
+      }
+
+      // attach events for remove / qty adjust inside cart
+      itemsEl.querySelectorAll('.small-remove').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        removeFromCart(id);
+      }));
+      itemsEl.querySelectorAll('.qty-inc').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        const current = Number(itemsEl.querySelector('.cart-qty-input[data-id="'+id+'"]').value || 1);
+        updateQty(id, current + 1);
+      }));
+      itemsEl.querySelectorAll('.qty-dec').forEach(b => b.addEventListener('click', e=>{
+        const id = e.currentTarget.dataset.id;
+        const current = Number(itemsEl.querySelector('.cart-qty-input[data-id="'+id+'"]').value || 1);
+        updateQty(id, Math.max(1, current - 1));
+      }));
+      itemsEl.querySelectorAll('.cart-qty-input').forEach(inp => inp.addEventListener('change', e=>{
+        const id = e.currentTarget.dataset.id;
+        let v = Number(e.currentTarget.value || 1);
+        if(!Number.isFinite(v) || v < 1) v = 1;
+        updateQty(id, v);
+      }));
+    }
+
+    /* ====== UI: abrir/cerrar drawer ====== */
+    function openDrawer(){
+      const drawer = $('#cartDrawer');
+      drawer.classList.add('open');
+      drawer.setAttribute('aria-hidden','false');
+      drawer.setAttribute('aria-modal','true');
+    }
+    function closeDrawer(){
+      const drawer = $('#cartDrawer');
+      drawer.classList.remove('open');
+      drawer.setAttribute('aria-hidden','true');
+      drawer.setAttribute('aria-modal','false');
+    }
+
+    function flashCart(){
+      // pequena animación al agregar
+      const btn = document.getElementById('openCart');
+      btn.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}],{duration:300});
+    }
+
+    /* ====== Buscador y orden ====== */
+    function applyFilters(){
+      const q = ($('#searchInput').value || '').toLowerCase().trim();
+      const sort = $('#sortSelect').value;
+
+      let list = [...PRODUCTS];
+
+      if(q){
+        list = list.filter(p => (p.name + ' ' + p.short + ' ' + p.desc).toLowerCase().includes(q));
+      }
+
+      if(sort === 'price-asc'){
+        list.sort((a,b)=>a.price - b.price);
+      } else if(sort === 'price-desc'){
+        list.sort((a,b)=>b.price - a.price);
+      }
+
+      products = list;
+      renderProducts(products);
+    }
+
+    /* ====== Checkout (simulado) ====== */
+    function checkout(){
+      if(Object.keys(cart).length === 0){
+        alert('Tu carrito está vacío.');
+        return;
+      }
+      // Simulamos comprobación de stock antes de "finalizar"
+      for(const id in cart){
+        const prod = PRODUCTS.find(p=>p.id===id);
+        if(!prod) { alert('Producto no encontrado: ' + id); return; }
+        if(cart[id].qty > prod.stock){
+          alert(`No hay suficiente stock de ${prod.name}. Stock disponible: ${prod.stock}`);
+          return;
+        }
+      }
+
+      // Reducir stock simulado y limpiar carrito
+      for(const id in cart){
+        const prod = PRODUCTS.find(p=>p.id===id);
+        prod.stock -= cart[id].qty;
+      }
+      alert('Pedido confirmado. Gracias por comprar con La Gran Cosecha.\n(Esto es una demo — no se envió realmente.)');
+      clearCart();
+      applyFilters();
+      closeDrawer();
+    }
+
+    /* ====== Inicialización ====== */
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // render inicial
+      renderProducts(products);
+      renderCart();
+      $('#year').textContent = new Date().getFullYear();
+
+      // eventos UI
+      $('#searchInput').addEventListener('input', ()=> applyFilters());
+      $('#sortSelect').addEventListener('change', ()=> applyFilters());
+      $('#openCart').addEventListener('click', ()=> {
+        renderCart();
+        openDrawer();
+      });
+      // click fuera del drawer para cerrarlo
+      document.addEventListener('click', (e)=>{
+        const drawer = $('#cartDrawer');
+        const isOpen = drawer.classList.contains('open');
+        if(!isOpen) return;
+        if(!drawer.contains(e.target) && !$('#openCart').contains(e.target)){
+          closeDrawer();
+        }
+      });
+      // botones checkout / clear
+      $('#checkoutBtn').addEventListener('click', checkout);
+      $('#clearBtn').addEventListener('click', ()=> {
+        if(confirm('¿Vaciar el carrito?')) clearCart();
+      });
+
+      // support keyboard Esc to close drawer
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape') closeDrawer();
+      });
+    });
+
+    // Exponer algunas funciones para debug (opcional)
+    window._app = { addToCart, cart, PRODUCTS };
+  </script>
+</body>
+</html>
